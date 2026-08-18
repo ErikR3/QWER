@@ -7,9 +7,11 @@ window.Closed += (sender, e) => window.Close();
 
 var shape = new CircleShape(50)
 {
-    FillColor = Color.Green,
+    FillColor = Color.Red,
     Position = new Vector2f(375, 275)
 };
+
+
 
 while (window.IsOpen)
 {
