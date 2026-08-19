@@ -32,4 +32,14 @@ public static class ECSDebugger
         }
         Console.WriteLine("]");
     }
+
+    public static void PrintDense(int entityId)
+    {
+        Console.WriteLine("Dense: {0}", entityId);
+    }
+
+    public static void PrintSparse(int entityId)
+    {
+        Console.WriteLine("Sparse: {0}", entityId);
+    }
 }

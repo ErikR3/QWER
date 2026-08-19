@@ -1,5 +1,10 @@
 public class ComponentManager
 {
+    private int[] sparse;
+    private int[] denseEntities;
+    private T[] denseComponents;
+    private int count;
+
     private readonly Dictionary<Type, object> _stores = new();
 
     private Dictionary<int, T> GetStore<T>() where T : struct

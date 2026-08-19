@@ -15,12 +15,14 @@ public class EntityManager
 
     public int[] GetDense => dense;
 
-    public int GetSpecDense(int entityId) => dense[entityId];
-
-    public int GetSpecSparse(int entityId)
+    public int GetEntityAt(int denseIndex)
     {
-        return 0;
+        if (denseIndex < 0 || denseIndex >= denseCount)
+            throw new ArgumentOutOfRangeException(nameof(denseIndex));
+        return dense[denseIndex];
     }
+
+    public int GetDenseIndex(int entityId) => sparse[entityId];
 
     public int GetDenseCount() => denseCount;
 
@@ -37,9 +39,14 @@ public class EntityManager
         denseCount++;
     }
 
-    public void RemoveEntity()
+    public void RemoveEntity(int entityId)
     {
-
+        var index = sparse[entityId];
+        int lastEntity = dense[denseCount - 1];
+        dense[index] = lastEntity;
+        sparse[lastEntity] = index;
+        denseCount--;
+        sparse[entityId] = -1;
     }
 
     public int GetEntity(int entityId)
