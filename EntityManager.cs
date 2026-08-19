@@ -11,28 +11,6 @@ public class EntityManager
         Array.Fill(sparse, -1);
     }
 
-    public void PrintSets()
-    {
-        // Dense-raden
-        Console.Write("dense:  [");
-        for (int i = 0; i < denseCount; i++)
-        {
-            Console.Write(dense[i]);
-            if (i < denseCount - 1) Console.Write(", ");
-        }
-        Console.WriteLine("]");
-
-        // Sparse-raden
-        Console.Write("sparse: [");
-        for (int i = 0; i < sparse.Length; i++)
-        {
-            string val = sparse[i] == -1 ? "_" : sparse[i].ToString();
-            Console.Write(val.PadLeft(2));
-            if (i < sparse.Length - 1) Console.Write(", ");
-        }
-        Console.WriteLine("]");
-    }
-
     public int[] GetSparse => sparse;
 
     public int[] GetDense => dense;

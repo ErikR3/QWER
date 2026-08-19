@@ -16,7 +16,7 @@ var EntityTest = new EntityManager();
 EntityTest.AddEntity(3);
 EntityTest.AddEntity(7);
 EntityTest.AddEntity(2);
-EntityTest.PrintSets();
+ECSDebugger.PrintSets(EntityTest);
 
 /* while (window.IsOpen)
 {
