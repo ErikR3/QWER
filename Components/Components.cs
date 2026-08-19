@@ -1,3 +1,7 @@
+using SFML.Graphics;
+using SFML.System;
+using SFML.Window;
+
 namespace Components;
 
 public struct PositionComponent
@@ -36,4 +40,10 @@ public struct DashComponent
 {
     float speed;
     bool dashing;
+}
+
+public struct SpriteComponent
+{
+    // sf::Texture texture;
+    // sf::Sprite sprite;
 }
