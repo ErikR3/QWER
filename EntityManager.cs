@@ -8,7 +8,7 @@ public class EntityManager
 
     public EntityManager()
     {
-
+        Array.Fill(sparse, -1);
     }
 
     public void PrintSets()
@@ -26,21 +26,11 @@ public class EntityManager
         Console.Write("sparse: [");
         for (int i = 0; i < sparse.Length; i++)
         {
-            // Anta t.ex. -1 som "oanvänd" markör i din faktiska array
             string val = sparse[i] == -1 ? "_" : sparse[i].ToString();
             Console.Write(val.PadLeft(2));
             if (i < sparse.Length - 1) Console.Write(", ");
         }
         Console.WriteLine("]");
-
-        // Indexraden (för tydlighet)
-        Console.Write("         ");
-        for (int i = 0; i < sparse.Length; i++)
-        {
-            Console.Write(i.ToString().PadLeft(2));
-            if (i < sparse.Length - 1) Console.Write("  ");
-        }
-        Console.WriteLine();
     }
 
     public int[] GetSparse => sparse;
@@ -56,12 +46,22 @@ public class EntityManager
 
     public int GetDenseCount() => denseCount;
 
+    /* dense:  [3, 7, 2]        // index 0, 1, 2
+    sparse: [_, _, 2, 0, _, _, _, 1, _, _]
+             0  1  2  3  4  5  6  7  8  9   <- detta är "värdet" */
+
     public void AddEntity(int entityId)
     {
         if (denseCount == dense.Length)
             Array.Resize(ref dense, dense.Length * 2);
-        dense[denseCount++] = entityId;
-        sparse[denseCount] = entityId;
+        dense[denseCount] = entityId;
+        sparse[entityId] = denseCount;
+        denseCount++;
+    }
+
+    public void RemoveEntity()
+    {
+
     }
 
     public int GetEntity(int entityId)

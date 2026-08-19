@@ -13,9 +13,9 @@ var shape = new CircleShape(50)
     }; */
 
 var EntityTest = new EntityManager();
-EntityTest.AddEntity(1);
 EntityTest.AddEntity(3);
 EntityTest.AddEntity(7);
+EntityTest.AddEntity(2);
 EntityTest.PrintSets();
 
 /* while (window.IsOpen)
