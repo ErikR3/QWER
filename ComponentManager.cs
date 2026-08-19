@@ -1,47 +1,48 @@
+namespace QWER;
+
 public class ComponentManager
 {
-    private int[] sparse;
-    private int[] denseEntities;
-    private T[] denseComponents;
-    private int count;
+    private readonly Dictionary<Type, IComponentStorage> stores = new();
 
-    private readonly Dictionary<Type, object> _stores = new();
-
-    private Dictionary<int, T> GetStore<T>() where T : struct
+    private ComponentStorage<T> GetStorage<T>() where T : struct
     {
-        if (!_stores.TryGetValue(typeof(T), out var store))
+        var type = typeof(T);
+        if (!stores.TryGetValue(type, out var store))
         {
-            store = new Dictionary<int, T>();
-            _stores[typeof(T)] = store;
+            store = new ComponentStorage<T>();
+            stores[type] = store;
         }
-        return (Dictionary<int, T>)store;
+        return (ComponentStorage<T>)store;
     }
 
     public void AddComponent<T>(int entityId, T component) where T : struct
     {
-        GetStore<T>()[entityId] = component;
+        GetStorage<T>().AddComponent(entityId, component);
     }
 
     public bool HasComponent<T>(int entityId) where T : struct
     {
-        return GetStore<T>().ContainsKey(entityId);
+        return GetStorage<T>().HasComponent(entityId);
     }
 
     public ref T GetComponent<T>(int entityId) where T : struct
     {
-        var store = GetStore<T>();
-        if (!store.ContainsKey(entityId))
-            throw new KeyNotFoundException($"Entity {entityId} saknar {typeof(T).Name}");
-        return ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrNullRef(store, entityId);
+        return ref GetStorage<T>().GetComponent(entityId);
     }
 
     public void RemoveComponent<T>(int entityId) where T : struct
     {
-        GetStore<T>().Remove(entityId);
+        GetStorage<T>().RemoveComponent(entityId);
     }
 
     public IEnumerable<int> GetEntitiesWith<T>() where T : struct
     {
-        return GetStore<T>().Keys;
+        return GetStorage<T>().GetEntities();
+    }
+
+    public void EntityDestroyed(int entityId)
+    {
+        foreach (var store in stores.Values)
+            store.RemoveComponent(entityId);
     }
 }
