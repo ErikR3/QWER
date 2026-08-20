@@ -58,7 +58,7 @@ public class EntityManager
     {
         var max = dense[0];
 
-        for(int i = 0; i < dense.Length; i++)
+        for(int i = 0; i < denseCount; i++)
         {
             if (max < dense[i])
             {
