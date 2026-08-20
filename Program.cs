@@ -22,6 +22,7 @@ ECSDebugger.PrintSets(EntityTest);
 EntityTest.AddEntity(4);
 ECSDebugger.PrintSets(EntityTest);
 
+ECSDebugger.PrintNewId(EntityTest);
 ECSDebugger.PrintDense(EntityTest.GetEntityAt(EntityTest.GetDenseIndex(3)));
 ECSDebugger.PrintDense(EntityTest.GetEntityAt(EntityTest.GetDenseIndex(7)));
 

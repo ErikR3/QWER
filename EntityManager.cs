@@ -22,6 +22,11 @@ public class EntityManager
         return dense[denseIndex];
     }
 
+    /* public int GetFreeId()
+    {
+        //for ()
+    } */
+
     public int GetDenseIndex(int entityId) => sparse[entityId];
 
     public int GetDenseCount() => denseCount;
@@ -49,8 +54,17 @@ public class EntityManager
         sparse[entityId] = -1;
     }
 
-    public int GetEntity(int entityId)
+    public int GetNewId()
     {
-        return 0;
+        var max = dense[0];
+
+        for(int i = 0; i < dense.Length; i++)
+        {
+            if (max < dense[i])
+            {
+                max = dense[i];
+            }
+        }
+        return max + 1;
     }
 }
