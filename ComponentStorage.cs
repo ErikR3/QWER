@@ -4,6 +4,7 @@ public interface IComponentStorage
 {
     bool HasComponent(int entityId);
     void RemoveComponent(int entityId);
+    IEnumerable<int> GetEntities();
 }
 
 public class ComponentStorage<T> : IComponentStorage where T : struct

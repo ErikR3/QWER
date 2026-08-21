@@ -45,4 +45,26 @@ public class ComponentManager
         foreach (var store in stores.Values)
             store.RemoveComponent(entityId);
     }
+
+    public IEnumerable<int> GetEntitiesWith<T1, T2>() where T1 : struct where T2 : struct
+    {
+        var storage1 = GetStorage<T1>();
+        var storage2 = GetStorage<T2>();
+
+        IComponentStorage smaller = storage1;
+        IComponentStorage other = storage2;
+        if (storage2.GetDenseCount() < storage1.GetDenseCount())
+        {
+            smaller = storage2;
+            other = storage1;
+        }
+
+        foreach (int entityId in smaller.GetEntities())
+        {
+            if (other.HasComponent(entityId))
+            {
+                yield return entityId;
+            }
+        }
+    }
 }
