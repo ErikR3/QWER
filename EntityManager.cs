@@ -27,7 +27,7 @@ public class EntityManager
 
     public int GetDenseIndex(int entityId) => sparse[entityId];
 
-    public bool ValidateValidIdInRange(int entityId)
+    public bool ValidateIdInRange(int entityId)
     {
         if (entityId >= 0 && entityId < ECSConfig.MaxEntities)
         {
@@ -37,7 +37,7 @@ public class EntityManager
         }
     }
 
-    public bool ValidateValidIdInUse(int entityId)
+    public bool ValidateIdInUse(int entityId)
     {
         if (GetDenseIndex(entityId) != -1)
         {
@@ -82,9 +82,9 @@ public class EntityManager
 
     public void RemoveEntity(int entityId)
     {
-        if (ValidateValidIdInRange(entityId))
+        if (ValidateIdInRange(entityId))
         {
-            if (ValidateValidIdInUse(entityId))
+            if (ValidateIdInUse(entityId))
             {
                 var index = sparse[entityId];
                 int lastEntity = dense[denseCount - 1];
@@ -95,11 +95,8 @@ public class EntityManager
 
                 unUsedId[freeCount] = entityId;
                 freeCount++;
-            } else {
-                throw new InvalidOperationException($"EntityId {entityId} is not currently active");
+
             }
-        } else {
-            throw new ArgumentOutOfRangeException(nameof(entityId));
         }
     }
 }

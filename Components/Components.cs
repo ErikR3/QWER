@@ -6,8 +6,8 @@ namespace Components;
 
 public struct PositionComponent
 {
-    float x;
-    float y;
+    public float x;
+    public float y;
 }
 
 public struct VelocityComponent

@@ -25,8 +25,84 @@ public class Coordinator {
         cm.EntityDestroyed(entityId);
     }
 
-    public void AddComponent(int entityId)
+    public void AddComponent<T>(int entityId, T component) where T : struct
     {
+        if (em.ValidateIdInRange(entityId))
+        {
+            if (em.ValidateIdInUse(entityId))
+            {
+                cm.AddComponent<T>(entityId, component);
+            }
+            else
+            {
+                throw new InvalidOperationException($"EntityId {entityId} is not currently active");
+            }
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException(nameof(entityId));
+        }
+    }
 
+    public bool HasComponent<T>(int entityId) where T : struct
+    {
+        if (em.ValidateIdInRange(entityId))
+        {
+            if (em.ValidateIdInUse(entityId))
+            {
+                return cm.HasComponent<T>(entityId);
+            }
+            else
+            {
+                throw new InvalidOperationException($"EntityId {entityId} is not currently active");
+            }
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException(nameof(entityId));
+        }
+    }
+
+    public ref T GetComponent<T>(int entityId) where T : struct
+    {
+        if (em.ValidateIdInRange(entityId))
+        {
+            if (em.ValidateIdInUse(entityId))
+            {
+                return ref cm.GetComponent<T>(entityId);
+            }
+            else
+            {
+                throw new InvalidOperationException($"EntityId {entityId} is not currently active");
+            }
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException(nameof(entityId));
+        }
+    }
+
+    public void RemoveComponent<T>(int entityId) where T : struct
+    {
+        if (em.ValidateIdInRange(entityId))
+        {
+            if (em.ValidateIdInUse(entityId))
+            {
+                cm.RemoveComponent<T>(entityId);
+            }
+            else
+            {
+                throw new InvalidOperationException($"EntityId {entityId} is not currently active");
+            }
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException(nameof(entityId));
+        }
+    }
+
+    public IEnumerable<int> GetEntitiesWith<T>() where T : struct
+    {
+        return cm.GetEntitiesWith<T>();
     }
 }
