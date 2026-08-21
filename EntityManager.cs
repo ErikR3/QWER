@@ -60,14 +60,24 @@ public class EntityManager
 
     public void RemoveEntity(int entityId)
     {
-        var index = sparse[entityId];
-        int lastEntity = dense[denseCount - 1];
-        dense[index] = lastEntity;
-        sparse[lastEntity] = index;
-        denseCount--;
-        sparse[entityId] = -1;
+        if (entityId >= 0 && entityId < ECSConfig.MaxEntities)
+        {
+            if (GetDenseIndex(entityId) != -1)
+            {
+                var index = sparse[entityId];
+                int lastEntity = dense[denseCount - 1];
+                dense[index] = lastEntity;
+                sparse[lastEntity] = index;
+                denseCount--;
+                sparse[entityId] = -1;
 
-        unUsedId[freeCount] = entityId;
-        freeCount++;
+                unUsedId[freeCount] = entityId;
+                freeCount++;
+            } else {
+                throw new InvalidOperationException("EntityId {entityId} is not currently active");
+            }
+        } else {
+            throw new ArgumentOutOfRangeException(nameof(entityId));
+        }
     }
 }
