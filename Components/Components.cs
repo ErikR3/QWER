@@ -47,3 +47,9 @@ public struct SpriteComponent
     // sf::Texture texture;
     // sf::Sprite sprite;
 }
+
+public struct HitboxComponent
+{
+    float width;
+    float height;
+}

@@ -5,6 +5,7 @@ namespace QWER;
 public class Coordinator {
     private EntityManager em;
     private ComponentManager cm;
+    private int[] EntitiesIdDense = new int[ECSConfig.MaxEntities];
 
     public Coordinator()
     {
@@ -12,11 +13,16 @@ public class Coordinator {
         cm = new ComponentManager();
     }
 
-    public int CreateEntity(){
-        em.AddEntity();
+    public int CreateEntity()
+    {
+        var newEntityId = em.AddEntity();
 
+        return newEntityId;
+    }
 
-
-        return 0;
+    public void DestroyEntity(int entityId)
+    {
+        em.RemoveEntity(entityId);
+        cm.EntityDestroyed(entityId);
     }
 }

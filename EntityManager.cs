@@ -45,7 +45,7 @@ public class EntityManager
 
     public int GetDenseIndex(int entityId) => sparse[entityId];
 
-    public void AddEntity()
+    public int AddEntity()
     {
         var entityId = GetFreeId();
         dense[denseCount] = entityId;
@@ -54,6 +54,8 @@ public class EntityManager
 
         unUsedId[freeCount - 1] = -1;
         freeCount--;
+
+        return entityId;
     }
 
     public void RemoveEntity(int entityId)
