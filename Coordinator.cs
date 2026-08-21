@@ -44,6 +44,10 @@ public class Coordinator {
         }
     }
 
+    // When you call this function you need to explicitly state the struct type
+    // Otherwise it won't compile because it cant check for whether the entity does
+    // Have the specified component or not.
+
     public bool HasComponent<T>(int entityId) where T : struct
     {
         if (em.ValidateIdInRange(entityId))
@@ -101,8 +105,8 @@ public class Coordinator {
         }
     }
 
-    public IEnumerable<int> GetEntitiesWith<T>() where T : struct
+    public IEnumerable<int> GetEntitiesWith<T1, T2>() where T1 : struct where T2 : struct
     {
-        return cm.GetEntitiesWith<T>();
+        return cm.GetEntitiesWith<T1, T2>();
     }
 }

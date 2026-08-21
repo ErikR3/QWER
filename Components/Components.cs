@@ -12,34 +12,34 @@ public struct PositionComponent
 
 public struct VelocityComponent
 {
-    float velocity_x;
-    float velocity_y;
+    public float velocity_x;
+    public float velocity_y;
 }
 
 public struct ControlComponent
 {
-    float movementDirection;
-    bool jumpPressed;
+    public float movementDirection;
+    public bool jumpPressed;
 }
 
-struct PlatformerComponent
+public struct PlatformerComponent
 {
-    bool inContactWithPlatform;
-    float speedOnGround;
-    float speedOnAir;
+    public bool inContactWithPlatform;
+    public float speedOnGround;
+    public float speedOnAir;
 }
 
 public struct JumpComponent
 {
-    float speed;
-    bool jumping;
-    float initialImpulse;
+    public float speed;
+    public bool jumping;
+    public float initialImpulse;
 }
 
 public struct DashComponent
 {
-    float speed;
-    bool dashing;
+    public float speed;
+    public bool dashing;
 }
 
 public struct SpriteComponent
@@ -50,6 +50,6 @@ public struct SpriteComponent
 
 public struct HitboxComponent
 {
-    float width;
-    float height;
+    public float width;
+    public float height;
 }
