@@ -13,18 +13,22 @@ var shape = new CircleShape(50)
 };
 
 var EntityTest = new EntityManager();
-EntityTest.AddEntity(3);
-EntityTest.AddEntity(7);
-EntityTest.AddEntity(2);
+EntityTest.AddEntity();
+EntityTest.AddEntity();
+EntityTest.AddEntity();
 ECSDebugger.PrintSets(EntityTest);
-EntityTest.RemoveEntity(2);
+EntityTest.RemoveEntity(1);
 ECSDebugger.PrintSets(EntityTest);
-EntityTest.AddEntity(4);
+EntityTest.AddEntity();
+EntityTest.AddEntity();
+EntityTest.AddEntity();
+ECSDebugger.PrintSets(EntityTest);
+EntityTest.RemoveEntity(3);
+ECSDebugger.PrintSets(EntityTest);
+EntityTest.AddEntity();
 ECSDebugger.PrintSets(EntityTest);
 
-ECSDebugger.PrintNewId(EntityTest);
-ECSDebugger.PrintDense(EntityTest.GetEntityAt(EntityTest.GetDenseIndex(3)));
-ECSDebugger.PrintDense(EntityTest.GetEntityAt(EntityTest.GetDenseIndex(7)));
+// ECSDebugger.PrintDense(EntityTest.GetEntityAt(EntityTest.GetDenseIndex(2)));
 
 while (window.IsOpen)
 {

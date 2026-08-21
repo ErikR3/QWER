@@ -42,8 +42,4 @@ public static class ECSDebugger
     {
         Console.WriteLine("Sparse: {0}", entityId);
     }
-
-    public static void PrintNewId(EntityManager em){
-        Console.WriteLine("New id: {0}", em.GetNewId());
-    }
 }

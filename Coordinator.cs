@@ -13,7 +13,8 @@ public class Coordinator {
     }
 
     public int CreateEntity(){
-        var newEntityId = em.GetNewId();
+        em.AddEntity();
+
 
 
         return 0;

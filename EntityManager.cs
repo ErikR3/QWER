@@ -5,15 +5,36 @@ public class EntityManager
     private int[] sparse = new int[ECSConfig.MaxEntities];
     private int[] dense = new int[ECSConfig.MaxEntities];
     private int denseCount = 0;
+    private int[] unUsedId = new int[ECSConfig.MaxEntities];
+    private int freeCount = ECSConfig.MaxEntities;
 
     public EntityManager()
     {
         Array.Fill(sparse, -1);
+        for (int i = 0; i < ECSConfig.MaxEntities; i++)
+        {
+            unUsedId[(ECSConfig.MaxEntities - 1) - i] = i;
+        }
     }
 
     public int[] GetSparse => sparse;
 
     public int[] GetDense => dense;
+
+    public int[] GetUnUsedId => unUsedId;
+
+    public int GetDenseCount() => denseCount;
+
+    private int GetFreeId()
+    {
+        if (freeCount != 0)
+        {
+            var entityId = unUsedId[freeCount - 1];
+            return entityId;
+        } else {
+            return -1;
+        }
+    }
 
     public int GetEntityAt(int denseIndex)
     {
@@ -22,26 +43,17 @@ public class EntityManager
         return dense[denseIndex];
     }
 
-    /* public int GetFreeId()
-    {
-        //for ()
-    } */
-
     public int GetDenseIndex(int entityId) => sparse[entityId];
 
-    public int GetDenseCount() => denseCount;
-
-    /* dense:  [3, 7, 2]        // index 0, 1, 2
-    sparse: [_, _, 2, 0, _, _, _, 1, _, _]
-             0  1  2  3  4  5  6  7  8  9   <- detta är "värdet" */
-
-    public void AddEntity(int entityId)
+    public void AddEntity()
     {
-        if (denseCount == dense.Length)
-            Array.Resize(ref dense, dense.Length * 2);
+        var entityId = GetFreeId();
         dense[denseCount] = entityId;
         sparse[entityId] = denseCount;
         denseCount++;
+
+        unUsedId[freeCount - 1] = -1;
+        freeCount--;
     }
 
     public void RemoveEntity(int entityId)
@@ -52,19 +64,8 @@ public class EntityManager
         sparse[lastEntity] = index;
         denseCount--;
         sparse[entityId] = -1;
-    }
 
-    public int GetNewId()
-    {
-        var max = dense[0];
-
-        for(int i = 0; i < denseCount; i++)
-        {
-            if (max < dense[i])
-            {
-                max = dense[i];
-            }
-        }
-        return max + 1;
+        unUsedId[freeCount] = entityId;
+        freeCount++;
     }
 }
