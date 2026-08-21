@@ -25,13 +25,37 @@ public class EntityManager
 
     public int GetDenseCount() => denseCount;
 
+    public int GetDenseIndex(int entityId) => sparse[entityId];
+
+    public bool ValidateValidIdInRange(int entityId)
+    {
+        if (entityId >= 0 && entityId < ECSConfig.MaxEntities)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public bool ValidateValidIdInUse(int entityId)
+    {
+        if (GetDenseIndex(entityId) != -1)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private int GetFreeId()
     {
         if (freeCount != 0)
         {
             var entityId = unUsedId[freeCount - 1];
             return entityId;
-        } else {
+        }
+        else
+        {
             return -1;
         }
     }
@@ -42,8 +66,6 @@ public class EntityManager
             throw new ArgumentOutOfRangeException(nameof(denseIndex));
         return dense[denseIndex];
     }
-
-    public int GetDenseIndex(int entityId) => sparse[entityId];
 
     public int AddEntity()
     {
@@ -60,9 +82,9 @@ public class EntityManager
 
     public void RemoveEntity(int entityId)
     {
-        if (entityId >= 0 && entityId < ECSConfig.MaxEntities)
+        if (ValidateValidIdInRange(entityId))
         {
-            if (GetDenseIndex(entityId) != -1)
+            if (ValidateValidIdInUse(entityId))
             {
                 var index = sparse[entityId];
                 int lastEntity = dense[denseCount - 1];
@@ -74,7 +96,7 @@ public class EntityManager
                 unUsedId[freeCount] = entityId;
                 freeCount++;
             } else {
-                throw new InvalidOperationException("EntityId {entityId} is not currently active");
+                throw new InvalidOperationException($"EntityId {entityId} is not currently active");
             }
         } else {
             throw new ArgumentOutOfRangeException(nameof(entityId));

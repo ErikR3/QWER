@@ -21,7 +21,12 @@ public class Coordinator {
 
     public void DestroyEntity(int entityId)
     {
-        cm.EntityDestroyed(entityId);
         em.RemoveEntity(entityId);
+        cm.EntityDestroyed(entityId);
+    }
+
+    public void AddComponent(int entityId)
+    {
+
     }
 }
