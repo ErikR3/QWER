@@ -23,6 +23,5 @@ while (window.IsOpen)
 
     window.DispatchEvents();
     window.Clear(Color.Black);
-
     window.Display();
 }

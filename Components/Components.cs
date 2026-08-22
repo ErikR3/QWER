@@ -31,9 +31,9 @@ public struct PlatformerComponent
 
 public struct JumpComponent
 {
-    public float speed;
-    public bool jumping;
     public float initialImpulse;
+    public int maxJumps;
+    public int jumpsRemaining;
 }
 
 public struct DashComponent
