@@ -12,8 +12,8 @@ public struct PositionComponent
 
 public struct VelocityComponent
 {
-    public float velocity_x;
-    public float velocity_y;
+    public float x;
+    public float y;
 }
 
 public struct ControlComponent
