@@ -20,6 +20,7 @@ public struct ControlComponent
 {
     public float movementDirection;
     public bool jumpPressed;
+    public bool jumpHeldLastFrame;
 }
 
 public struct PlatformerComponent

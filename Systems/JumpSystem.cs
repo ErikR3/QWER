@@ -28,8 +28,9 @@ public class JumpSystem : ISystem
         {
             var entityPos = coordinator.GetComponent<PositionComponent>(entityId);
             var entityHitbox = coordinator.GetComponent<HitboxComponent>(entityId);
-            var entityVel = coordinator.GetComponent<VelocityComponent>(entityId);
-
+            ref var entityVel = ref coordinator.GetComponent<VelocityComponent>(entityId);
+            ref var entityJump = ref coordinator.GetComponent<JumpComponent>(entityId);
+            ref var entityControl = ref coordinator.GetComponent<ControlComponent>(entityId);
 
             foreach (int platformId in validPlatforms)
             {
@@ -38,10 +39,20 @@ public class JumpSystem : ISystem
                 var onPlatform = IsGrounded(entityPos, entityHitbox, entityVel, platformPos, platformHitbox, deltaTime);
                 if (onPlatform)
                 {
-                    ref var canJump = ref coordinator.GetComponent<JumpComponent>(entityId);
-                    canJump.jumpsRemaining = 1;
+                    entityJump.jumpsRemaining = entityJump.maxJumps;
+                    break;
                 }
             }
+
+            if (JumpTriggered(entityControl))
+            {
+                if (entityJump.jumpsRemaining > 0)
+                {
+                    entityVel.y = - entityJump.initialImpulse;
+                    entityJump.jumpsRemaining -= 1;
+                }
+            }
+            entityControl.jumpHeldLastFrame = entityControl.jumpPressed;
         }
     }
 
@@ -94,5 +105,14 @@ public class JumpSystem : ISystem
         var tolerance = Math.Max(minTolerance, Math.Abs(groundTolerance));
 
         return Math.Abs(entityBottom - platformTop) < tolerance;
+    }
+
+    public bool JumpTriggered(ControlComponent controlComponent)
+    {
+        if (controlComponent.jumpPressed && !controlComponent.jumpHeldLastFrame)
+        {
+            return true;
+        }
+        return false;
     }
 }
