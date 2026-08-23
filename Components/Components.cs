@@ -25,9 +25,10 @@ public struct ControlComponent
 
 public struct PlatformerComponent
 {
-    public bool inContactWithPlatform;
     public float speedOnGround;
+    public float terminalVelocityGround;
     public float speedOnAir;
+    public float terminalVelocityAir;
 }
 
 public struct JumpComponent
@@ -59,4 +60,9 @@ public struct GravityComponent
 {
     public float terminalVelocity;
     public float acceleration;
+}
+
+public struct GroundedComponent
+{
+    public bool isGrounded;
 }

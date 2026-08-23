@@ -2,6 +2,7 @@ namespace Systems;
 
 using QWER;
 using Components;
+using Physics;
 
 public class JumpSystem : ISystem
 {
@@ -26,23 +27,35 @@ public class JumpSystem : ISystem
 
         foreach (int entityId in movableEntities)
         {
-            var entityPos = coordinator.GetComponent<PositionComponent>(entityId);
+            ref var entityPos = ref coordinator.GetComponent<PositionComponent>(entityId);
             var entityHitbox = coordinator.GetComponent<HitboxComponent>(entityId);
             ref var entityVel = ref coordinator.GetComponent<VelocityComponent>(entityId);
             ref var entityJump = ref coordinator.GetComponent<JumpComponent>(entityId);
             ref var entityControl = ref coordinator.GetComponent<ControlComponent>(entityId);
+            ref var entityGrounded = ref coordinator.GetComponent<GroundedComponent>(entityId);
+
+            var wasGrounded = entityGrounded.isGrounded;
+            entityGrounded.isGrounded = false;
 
             foreach (int platformId in validPlatforms)
             {
                 var platformPos = coordinator.GetComponent<PositionComponent>(platformId);
                 var platformHitbox = coordinator.GetComponent<HitboxComponent>(platformId);
-                var onPlatform = IsGrounded(entityPos, entityHitbox, entityVel, platformPos, platformHitbox, deltaTime);
+                var onPlatform = Collision.IsGrounded(entityPos, entityHitbox, entityVel, platformPos, platformHitbox, deltaTime);
                 if (onPlatform)
                 {
+                    entityGrounded.isGrounded = true;
                     entityJump.jumpsRemaining = entityJump.maxJumps;
+                    entityPos.y = platformPos.y - entityHitbox.height;
+                    entityVel.y = Math.Min(entityVel.y, 0);
                     break;
                 }
             }
+
+            // if (entityGrounded.isGrounded != wasGrounded)
+            // {
+            //     Console.WriteLine($"[JumpSystem] entity {entityId} grounded -> {entityGrounded.isGrounded} (pos.y={entityPos.y:F1}, jumpsRemaining={entityJump.jumpsRemaining})");
+            // }
 
             if (JumpTriggered(entityControl))
             {
@@ -50,64 +63,15 @@ public class JumpSystem : ISystem
                 {
                     entityVel.y = - entityJump.initialImpulse;
                     entityJump.jumpsRemaining -= 1;
+                    // Console.WriteLine($"[JumpSystem] entity {entityId} jumped (vel.y={entityVel.y:F1}, jumpsRemaining={entityJump.jumpsRemaining})");
                 }
             } else if (JumpReleased(entityControl) && entityVel.y < 0)
             {
                 entityVel.y *= 0.3f;
+                // Console.WriteLine($"[JumpSystem] entity {entityId} jump cut (vel.y={entityVel.y:F1})");
             }
             entityControl.jumpHeldLastFrame = entityControl.jumpPressed;
         }
-    }
-
-    public bool IsGrounded(PositionComponent entityPos, HitboxComponent entityHitbox, VelocityComponent entityVel, PositionComponent platformPos, HitboxComponent platformHitbox, float deltaTime)
-    {
-        if (OverlapsOnXAxis(entityPos, entityHitbox, platformPos, platformHitbox) && NearGround(entityPos, entityHitbox, entityVel, platformPos, platformHitbox, deltaTime))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool OverlapsOnXAxis(PositionComponent entityPos, HitboxComponent entityHitbox, PositionComponent platformPos, HitboxComponent platformHitbox)
-    {
-        var entityLeft = entityPos.x;
-        var entityRight = entityPos.x + entityHitbox.width;
-        var platformLeft = platformPos.x;
-        var platformRight = platformPos.x + platformHitbox.width;
-        if (entityLeft < platformRight && entityRight > platformLeft)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public bool OverlapsOnYAxis(PositionComponent entityPos, HitboxComponent entityHitbox, PositionComponent platformPos, HitboxComponent platformHitbox)
-    {
-        var entityTop = entityPos.y;
-        var entityBottom = entityPos.y + entityHitbox.height;
-        var platformTop = platformPos.y;
-        var platformBottom = platformPos.y + platformHitbox.height;
-
-        if (entityTop < platformBottom && entityBottom > platformTop)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool NearGround(PositionComponent entityPos, HitboxComponent entityHitbox, VelocityComponent entityVel, PositionComponent platformPos, HitboxComponent platformHitbox, float deltaTime)
-    {
-        var entityTop = entityPos.y;
-        var entityBottom = entityPos.y + entityHitbox.height;
-        var platformTop = platformPos.y;
-        var platformBottom = platformPos.y + platformHitbox.height;
-        var groundTolerance = entityVel.y * deltaTime;
-        var minTolerance = entityHitbox.height * 0.01f;
-        var tolerance = Math.Max(minTolerance, Math.Abs(groundTolerance));
-
-        return Math.Abs(entityBottom - platformTop) < tolerance;
     }
 
     public bool JumpTriggered(ControlComponent controlComponent)
