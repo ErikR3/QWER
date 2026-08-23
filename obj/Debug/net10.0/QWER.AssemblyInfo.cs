@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QWER")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+511cbcde3bc037251eaee52b240055849f7b7bf5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4550d63a8d38068ea28f66bc373d242bdc3bd61d")]
 [assembly: System.Reflection.AssemblyProductAttribute("QWER")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QWER")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
