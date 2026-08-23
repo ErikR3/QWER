@@ -66,3 +66,7 @@ public struct GroundedComponent
 {
     public bool isGrounded;
 }
+
+public struct PlayerControlledComponent
+{
+}

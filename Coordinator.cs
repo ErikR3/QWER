@@ -109,4 +109,9 @@ public class Coordinator {
     {
         return cm.GetEntitiesWith<T1, T2>();
     }
+
+    public IEnumerable<int> GetEntitiesWith<T>() where T : struct
+    {
+        return cm.GetEntitiesWith<T>();
+    }
 }

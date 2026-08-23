@@ -52,10 +52,10 @@ public class JumpSystem : ISystem
                 }
             }
 
-            // if (entityGrounded.isGrounded != wasGrounded)
-            // {
-            //     Console.WriteLine($"[JumpSystem] entity {entityId} grounded -> {entityGrounded.isGrounded} (pos.y={entityPos.y:F1}, jumpsRemaining={entityJump.jumpsRemaining})");
-            // }
+            if (entityGrounded.isGrounded != wasGrounded)
+            {
+                Console.WriteLine($"[JumpSystem] entity {entityId} grounded -> {entityGrounded.isGrounded} (pos.y={entityPos.y:F1}, jumpsRemaining={entityJump.jumpsRemaining})");
+            }
 
             if (JumpTriggered(entityControl))
             {
@@ -63,12 +63,12 @@ public class JumpSystem : ISystem
                 {
                     entityVel.y = - entityJump.initialImpulse;
                     entityJump.jumpsRemaining -= 1;
-                    // Console.WriteLine($"[JumpSystem] entity {entityId} jumped (vel.y={entityVel.y:F1}, jumpsRemaining={entityJump.jumpsRemaining})");
+                    Console.WriteLine($"[JumpSystem] entity {entityId} jumped (vel.y={entityVel.y:F1}, jumpsRemaining={entityJump.jumpsRemaining})");
                 }
             } else if (JumpReleased(entityControl) && entityVel.y < 0)
             {
                 entityVel.y *= 0.3f;
-                // Console.WriteLine($"[JumpSystem] entity {entityId} jump cut (vel.y={entityVel.y:F1})");
+                Console.WriteLine($"[JumpSystem] entity {entityId} jump cut (vel.y={entityVel.y:F1})");
             }
             entityControl.jumpHeldLastFrame = entityControl.jumpPressed;
         }
