@@ -51,6 +51,9 @@ public class JumpSystem : ISystem
                     entityVel.y = - entityJump.initialImpulse;
                     entityJump.jumpsRemaining -= 1;
                 }
+            } else if (JumpReleased(entityControl) && entityVel.y < 0)
+            {
+                entityVel.y *= 0.3f;
             }
             entityControl.jumpHeldLastFrame = entityControl.jumpPressed;
         }
@@ -110,6 +113,15 @@ public class JumpSystem : ISystem
     public bool JumpTriggered(ControlComponent controlComponent)
     {
         if (controlComponent.jumpPressed && !controlComponent.jumpHeldLastFrame)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool JumpReleased(ControlComponent controlComponent)
+    {
+        if (!controlComponent.jumpPressed && controlComponent.jumpHeldLastFrame)
         {
             return true;
         }

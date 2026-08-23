@@ -45,12 +45,18 @@ public struct DashComponent
 
 public struct SpriteComponent
 {
-    // sf::Texture texture;
-    // sf::Sprite sprite;
+    public Texture texture;
+    public Sprite sprite;
 }
 
 public struct HitboxComponent
 {
     public float width;
     public float height;
+}
+
+public struct GravityComponent
+{
+    public float terminalVelocity;
+    public float acceleration;
 }
