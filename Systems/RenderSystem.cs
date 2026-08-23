@@ -13,7 +13,8 @@ public class RenderSystem {
 
         foreach (var entityId in entities)
         {
-
+            ref var entitySprite = ref coordinator.GetComponent<SpriteComponent>(entityId);
+            var entityControl = coordinator.GetComponent<ControlComponent>(entityId);
         }
     }
 }

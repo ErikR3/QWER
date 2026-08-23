@@ -70,3 +70,20 @@ public struct GroundedComponent
 public struct PlayerControlledComponent
 {
 }
+
+public enum AnimationState
+{
+    Idle,
+    Running,
+    Walking,
+}
+
+public struct AnimationComponent
+{
+    public bool facingRight;
+    public float timer;
+    public float frameDuration;
+    public AnimationState state;
+    public int frameIndex;
+    public int frameCount;
+}
