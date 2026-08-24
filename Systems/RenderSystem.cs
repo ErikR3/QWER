@@ -13,8 +13,16 @@ public class RenderSystem {
 
         foreach (var entityId in entities)
         {
+            if (!coordinator.HasComponent<SpriteComponent>(entityId))
+            {
+                continue;
+            }
+
             ref var entitySprite = ref coordinator.GetComponent<SpriteComponent>(entityId);
-            var entityControl = coordinator.GetComponent<ControlComponent>(entityId);
+            ref var entityPos = ref coordinator.GetComponent<PositionComponent>(entityId);
+
+            entitySprite.sprite.Position = new Vector2f(entityPos.x, entityPos.y);
+            window.Draw(entitySprite.sprite);
         }
     }
 }

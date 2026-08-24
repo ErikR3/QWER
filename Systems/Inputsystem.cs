@@ -15,6 +15,7 @@ public class InputSystem : ISystem
         {
             ref var entityControl = ref coordinator.GetComponent<ControlComponent>(entityId);
             entityControl.jumpPressed = Keyboard.IsKeyPressed(Keyboard.Key.Space);
+            entityControl.runHeld = Keyboard.IsKeyPressed(Keyboard.Key.LShift);
 
             var left = Keyboard.IsKeyPressed(Keyboard.Key.A) ? -1f : 0f;
             var right = Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1f : 0f;

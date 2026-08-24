@@ -5,7 +5,7 @@ using QWER;
 using Components;
 using Systems;
 
-var window = new RenderWindow(new VideoMode(new Vector2u(800, 600)), "My SFML Window");
+var window = new RenderWindow(new VideoMode(new Vector2u(1280, 720)), "My SFML Window");
 window.Closed += (sender, e) => window.Close();
 window.SetFramerateLimit(ECSConfig.Framerate);
 
@@ -35,6 +35,43 @@ c.AddComponent(playerId, new PlatformerComponent
 });
 c.AddComponent(playerId, new PlayerControlledComponent());
 
+var idleTexture = new Texture("Assets/Samurai/Idle.png");
+var walkTexture = new Texture("Assets/Samurai/Walk.png");
+var runTexture = new Texture("Assets/Samurai/Run.png");
+var jumpTexture = new Texture("Assets/Samurai/Jump.png");
+
+const int samuraiFrameSize = 128;
+var idleFrameCount = (int)(idleTexture.Size.X / samuraiFrameSize);
+var walkFrameCount = (int)(walkTexture.Size.X / samuraiFrameSize);
+var runFrameCount = (int)(runTexture.Size.X / samuraiFrameSize);
+var jumpFrameCount = (int)(jumpTexture.Size.X / samuraiFrameSize);
+
+c.AddComponent(playerId, new SpriteComponent
+{
+    texture = idleTexture,
+    sprite = new Sprite(idleTexture)
+});
+c.AddComponent(playerId, new AnimationSpriteSheets
+{
+    idleTexture = idleTexture,
+    idleFrameCount = idleFrameCount,
+    walkingTexture = walkTexture,
+    walkingFrameCount = walkFrameCount,
+    runningTexture = runTexture,
+    runningFrameCount = runFrameCount,
+    jumpingTexture = jumpTexture,
+    jumpingFrameCount = jumpFrameCount
+});
+c.AddComponent(playerId, new AnimationComponent
+{
+    facingRight = true,
+    timer = 0f,
+    frameDuration = 0.1f,
+    state = Components.AnimationState.Idle,
+    frameIndex = 0,
+    frameCount = idleFrameCount
+});
+
 // Input/Jump/Gravity/Platformer before MovementSystem, so the frame's final
 // velocity is what gets integrated into position ;)
 var sm = new SystemManager(c);
@@ -43,6 +80,9 @@ sm.RegisterSystem(new InputSystem());
 sm.RegisterSystem(new JumpSystem(c));
 sm.RegisterSystem(new PlatformerSystem());
 sm.RegisterSystem(new MovementSystem());
+sm.RegisterSystem(new AnimationSystem());
+
+var renderSystem = new RenderSystem();
 
 Clock deltaClock = new Clock();
 Clock debugClock = new Clock();
@@ -64,5 +104,6 @@ while (window.IsOpen)
 
     window.DispatchEvents();
     window.Clear(Color.Black);
+    renderSystem.Update(c, window);
     window.Display();
 }

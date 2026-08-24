@@ -21,6 +21,7 @@ public struct ControlComponent
     public float movementDirection;
     public bool jumpPressed;
     public bool jumpHeldLastFrame;
+    public bool runHeld;
 }
 
 public struct PlatformerComponent
@@ -76,6 +77,7 @@ public enum AnimationState
     Idle,
     Running,
     Walking,
+    Jumping,
 }
 
 public struct AnimationComponent
@@ -86,4 +88,23 @@ public struct AnimationComponent
     public AnimationState state;
     public int frameIndex;
     public int frameCount;
+}
+
+public struct AnimationSpriteSheets
+{
+    public Texture idleTexture;
+    public int idleFrameCount;
+    public Texture walkingTexture;
+    public int walkingFrameCount;
+    public Texture runningTexture;
+    public int runningFrameCount;
+    public Texture jumpingTexture;
+    public int jumpingFrameCount;
+}
+
+public struct HealthComponent
+{
+    public int maxHealth;
+    public int currentHealth;
+    public bool isDead;
 }
