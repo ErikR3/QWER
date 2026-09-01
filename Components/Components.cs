@@ -106,5 +106,12 @@ public struct HealthComponent
 {
     public int maxHealth;
     public int currentHealth;
+    public float iFrames;
     public bool isDead;
+}
+
+public struct DamageComponent
+{
+    public int hpDamage;
+    public int duration;
 }
