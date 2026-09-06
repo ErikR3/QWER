@@ -6,6 +6,8 @@ using Physics;
 
 public class HealthSystem : ISystem
 {
+    private float iFrameDuration = 2f / 3f;
+
     public void Update(Coordinator coordinator, float deltaTime)
     {
         var healthyEntities = coordinator.GetEntitiesWith<HealthComponent, HitboxComponent>();
@@ -21,9 +23,13 @@ public class HealthSystem : ISystem
                 var dmgHitbox = coordinator.GetComponent<HitboxComponent>(dmgId);
                 var dmgPosition = coordinator.GetComponent<PositionComponent>(dmgId);
                 var dmgDamage = coordinator.GetComponent<DamageComponent>(dmgId);
-                if (Collision.OverlapsOnXAxis(entityPosition, entityHitbox, dmgPosition, dmgHitbox) && Collision.OverlapsOnYAxis(entityPosition, entityHitbox, dmgPosition, dmgHitbox))
+                if (Collision.OverlapsOnXAxis(entityPosition, entityHitbox, dmgPosition, dmgHitbox) && Collision.OverlapsOnYAxis(entityPosition, entityHitbox, dmgPosition, dmgHitbox) && entityHealth.iFrames <= 0)
                 {
                     entityHealth.currentHealth -= dmgDamage.hpDamage;
+                }
+                if (entityHealth.iFrames > 0)
+                {
+                    entityHealth.iFrames -= deltaTime;
                 }
             }
         }

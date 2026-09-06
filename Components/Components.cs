@@ -108,6 +108,7 @@ public struct HealthComponent
     public int currentHealth;
     public float iFrames;
     public bool isDead;
+    public float stunFrames;
 }
 
 public struct DamageComponent
