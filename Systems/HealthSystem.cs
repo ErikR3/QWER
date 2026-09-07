@@ -38,7 +38,7 @@ public class HealthSystem : ISystem
             }
             if (entityHealth.currentHealth = 0)
             {
-                if (coordinator.HasComponent<PlayerComponent>(entityId))
+                if (coordinator.HasComponent<PlayerControlledComponent>(entityId))
                 {
                     // Game over logic
                 }

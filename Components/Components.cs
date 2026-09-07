@@ -22,6 +22,8 @@ public struct ControlComponent
     public bool jumpPressed;
     public bool jumpHeldLastFrame;
     public bool runHeld;
+    public bool blockPressed;
+    public bool blockPressedLastFrame;
 }
 
 public struct PlatformerComponent
@@ -114,6 +116,7 @@ public struct HealthComponent
 public struct DamageComponent
 {
     public int hpDamage;
+    public float postureDamage;
     public int duration;
 }
 
@@ -122,4 +125,14 @@ public struct EnergyComponent
     public float maxEnergy;
     public float storedEnergy;
     public float energyGain;
+}
+
+public struct PostureComponent
+{
+    public float maxPosture;
+    public float currentPosture;
+    public float tickingPosture;
+    public float postureDecayRate;
+    public float timeSinceLastHit;
+    public float isBroken;
 }
