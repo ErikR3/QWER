@@ -116,3 +116,10 @@ public struct DamageComponent
     public int hpDamage;
     public int duration;
 }
+
+public struct EnergyComponent
+{
+    public float maxEnergy;
+    public float storedEnergy;
+    public float energyGain;
+}

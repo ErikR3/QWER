@@ -7,6 +7,7 @@ using Physics;
 public class HealthSystem : ISystem
 {
     private float iFrameDuration = 2f / 3f;
+    private float stunFrameDuration = 1f / 3f;
 
     public void Update(Coordinator coordinator, float deltaTime)
     {
@@ -26,11 +27,22 @@ public class HealthSystem : ISystem
                 if (Collision.OverlapsOnXAxis(entityPosition, entityHitbox, dmgPosition, dmgHitbox) && Collision.OverlapsOnYAxis(entityPosition, entityHitbox, dmgPosition, dmgHitbox) && entityHealth.iFrames <= 0)
                 {
                     entityHealth.currentHealth -= dmgDamage.hpDamage;
+                    entityHealth.iFrames = iFrameDuration;
+                    entityHealth.stunFrames = stunFrameDuration;
                 }
-                if (entityHealth.iFrames > 0)
+            }
+            if (entityHealth.iFrames > 0)
+            {
+                entityHealth.iFrames -= deltaTime;
+                entityHealth.stunFrames -= deltaTime;
+            }
+            if (entityHealth.currentHealth = 0)
+            {
+                if (coordinator.HasComponent<PlayerComponent>(entityId))
                 {
-                    entityHealth.iFrames -= deltaTime;
+                    // Game over logic
                 }
+                entityHealth.isDead = true;
             }
         }
     }
