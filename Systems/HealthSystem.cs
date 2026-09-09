@@ -31,12 +31,13 @@ public class HealthSystem : ISystem
                     entityHealth.stunFrames = stunFrameDuration;
                 }
             }
+
             if (entityHealth.iFrames > 0)
             {
                 entityHealth.iFrames -= deltaTime;
                 entityHealth.stunFrames -= deltaTime;
             }
-            if (entityHealth.currentHealth == 0)
+            if (entityHealth.currentHealth <= 0)
             {
                 if (coordinator.HasComponent<PlayerControlledComponent>(entityId))
                 {
