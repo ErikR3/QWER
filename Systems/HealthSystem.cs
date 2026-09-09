@@ -36,7 +36,7 @@ public class HealthSystem : ISystem
                 entityHealth.iFrames -= deltaTime;
                 entityHealth.stunFrames -= deltaTime;
             }
-            if (entityHealth.currentHealth = 0)
+            if (entityHealth.currentHealth == 0)
             {
                 if (coordinator.HasComponent<PlayerControlledComponent>(entityId))
                 {

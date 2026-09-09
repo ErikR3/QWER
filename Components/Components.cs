@@ -136,3 +136,10 @@ public struct PostureComponent
     public float timeSinceLastHit;
     public float isBroken;
 }
+
+public struct AttachMentComponent
+{
+    public int parentEntity;
+    public float offsetX;
+    public float offsetY;
+}
