@@ -6,19 +6,11 @@ using Physics;
 
 public class JumpSystem : ISystem
 {
-    private List<int> validPlatforms;
+    private readonly StaticGeometry geometry;
 
-    public JumpSystem(Coordinator coordinator)
+    public JumpSystem(StaticGeometry geometry)
     {
-        validPlatforms = new List<int>();
-        var platformIteration = coordinator.GetEntitiesWith<HitboxComponent, PositionComponent>();
-        foreach (int id in platformIteration)
-        {
-            if (!coordinator.HasComponent<VelocityComponent>(id))
-            {
-                validPlatforms.Add(id);
-            }
-        }
+        this.geometry = geometry;
     }
 
     public void Update(Coordinator coordinator, float deltaTime)
@@ -37,7 +29,7 @@ public class JumpSystem : ISystem
             var wasGrounded = entityGrounded.isGrounded;
             entityGrounded.isGrounded = false;
 
-            foreach (int platformId in validPlatforms)
+            foreach (int platformId in geometry.Entities)
             {
                 var platformPos = coordinator.GetComponent<PositionComponent>(platformId);
                 var platformHitbox = coordinator.GetComponent<HitboxComponent>(platformId);

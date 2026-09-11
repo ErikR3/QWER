@@ -39,4 +39,32 @@ public static class Collision
         return OverlapsOnXAxis(entityPos, entityHitbox, platformPos, platformHitbox)
             && NearGround(entityPos, entityHitbox, entityVel, platformPos, platformHitbox, deltaTime);
     }
+
+    // X-axis mirror of NearGround: which side to test depends on travel direction,
+    // since a wall can be approached from the left or the right.
+    public static bool NearWall(PositionComponent entityPos, HitboxComponent entityHitbox, VelocityComponent entityVel, PositionComponent wallPos, HitboxComponent wallHitbox, float deltaTime)
+    {
+        var minTolerance = entityHitbox.width * 0.01f;
+        var tolerance = Math.Max(minTolerance, Math.Abs(entityVel.x * deltaTime));
+
+        if (entityVel.x > 0)
+        {
+            var entityRight = entityPos.x + entityHitbox.width;
+            var wallLeft = wallPos.x;
+            return Math.Abs(entityRight - wallLeft) < tolerance;
+        }
+        if (entityVel.x < 0)
+        {
+            var entityLeft = entityPos.x;
+            var wallRight = wallPos.x + wallHitbox.width;
+            return Math.Abs(entityLeft - wallRight) < tolerance;
+        }
+        return false;
+    }
+
+    public static bool HitsWall(PositionComponent entityPos, HitboxComponent entityHitbox, VelocityComponent entityVel, PositionComponent wallPos, HitboxComponent wallHitbox, float deltaTime)
+    {
+        return OverlapsOnYAxis(entityPos, entityHitbox, wallPos, wallHitbox)
+            && NearWall(entityPos, entityHitbox, entityVel, wallPos, wallHitbox, deltaTime);
+    }
 }

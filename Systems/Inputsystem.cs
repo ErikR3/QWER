@@ -16,6 +16,10 @@ public class InputSystem : ISystem
             ref var entityControl = ref coordinator.GetComponent<ControlComponent>(entityId);
             entityControl.jumpPressed = Keyboard.IsKeyPressed(Keyboard.Key.Space);
             entityControl.runHeld = Keyboard.IsKeyPressed(Keyboard.Key.LShift);
+            // Shift is dual-purpose: DashSystem only reacts to the press edge
+            // (dashPressed && !dashHeldLastFrame), so tapping/holding Shift
+            // dashes once, then falls through to running for as long as it's held.
+            entityControl.dashPressed = entityControl.runHeld;
 
             var left = Keyboard.IsKeyPressed(Keyboard.Key.A) ? -1f : 0f;
             var right = Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1f : 0f;

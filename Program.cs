@@ -5,7 +5,7 @@ using QWER;
 using Components;
 using Systems;
 
-var window = new RenderWindow(new VideoMode(new Vector2u(1280, 720)), "My SFML Window");
+var window = new RenderWindow(new VideoMode(new Vector2u(ECSConfig.WindowWidth, ECSConfig.WindowHeight)), "My SFML Window");
 window.Closed += (sender, e) => window.Close();
 window.SetFramerateLimit(ECSConfig.Framerate);
 
@@ -24,6 +24,12 @@ c.AddComponent(playerId, new VelocityComponent { x = 0, y = 0 });
 c.AddComponent(playerId, new HitboxComponent { width = 32, height = 32 });
 c.AddComponent(playerId, new ControlComponent { movementDirection = 0, jumpPressed = false, jumpHeldLastFrame = false });
 c.AddComponent(playerId, new JumpComponent { initialImpulse = 400, maxJumps = 2, jumpsRemaining = 2 });
+c.AddComponent(playerId, new DashComponent
+{
+    speed = ECSConfig.DefaultDashSpeed,
+    duration = ECSConfig.DefaultDashDuration,
+    cooldown = ECSConfig.DefaultDashCooldown
+});
 c.AddComponent(playerId, new GroundedComponent { isGrounded = false });
 c.AddComponent(playerId, new GravityComponent { acceleration = 900, terminalVelocity = 700 });
 c.AddComponent(playerId, new PlatformerComponent
@@ -40,11 +46,10 @@ var walkTexture = new Texture("Assets/Samurai/Walk.png");
 var runTexture = new Texture("Assets/Samurai/Run.png");
 var jumpTexture = new Texture("Assets/Samurai/Jump.png");
 
-const int samuraiFrameSize = 128;
-var idleFrameCount = (int)(idleTexture.Size.X / samuraiFrameSize);
-var walkFrameCount = (int)(walkTexture.Size.X / samuraiFrameSize);
-var runFrameCount = (int)(runTexture.Size.X / samuraiFrameSize);
-var jumpFrameCount = (int)(jumpTexture.Size.X / samuraiFrameSize);
+var idleFrameCount = (int)(idleTexture.Size.X / ECSConfig.SamuraiFrameSize);
+var walkFrameCount = (int)(walkTexture.Size.X / ECSConfig.SamuraiFrameSize);
+var runFrameCount = (int)(runTexture.Size.X / ECSConfig.SamuraiFrameSize);
+var jumpFrameCount = (int)(jumpTexture.Size.X / ECSConfig.SamuraiFrameSize);
 
 c.AddComponent(playerId, new SpriteComponent
 {
@@ -66,19 +71,26 @@ c.AddComponent(playerId, new AnimationComponent
 {
     facingRight = true,
     timer = 0f,
-    frameDuration = 0.1f,
+    frameDuration = ECSConfig.AnimationFrameDuration,
     state = Components.AnimationState.Idle,
     frameIndex = 0,
     frameCount = idleFrameCount
 });
 
-// Input/Jump/Gravity/Platformer before MovementSystem, so the frame's final
-// velocity is what gets integrated into position ;)
+// Built once, after all static geometry (platforms/walls) exists, and shared
+// by every system that needs to test collision against the world.
+var geometry = new Physics.StaticGeometry(c);
+
+// Input/Jump/Dash/Gravity/Platformer before MovementSystem, so the frame's
+// final velocity is what gets integrated into position ;)
+// Dash runs after Platformer so it overrides x-velocity instead of being
+// overridden by it, and before Movement so the dash velocity gets integrated.
 var sm = new SystemManager(c);
 sm.RegisterSystem(new GravitySystem());
 sm.RegisterSystem(new InputSystem());
-sm.RegisterSystem(new JumpSystem(c));
+sm.RegisterSystem(new JumpSystem(geometry));
 sm.RegisterSystem(new PlatformerSystem());
+sm.RegisterSystem(new DashSystem(geometry));
 sm.RegisterSystem(new MovementSystem());
 sm.RegisterSystem(new AnimationSystem());
 
@@ -93,7 +105,7 @@ while (window.IsOpen)
 
     sm.Update(deltaTime.AsSeconds());
 
-    if (debugClock.ElapsedTime.AsSeconds() > 0.5f)
+    if (debugClock.ElapsedTime.AsSeconds() > ECSConfig.DebugPrintIntervalSeconds)
     {
         var pos = c.GetComponent<PositionComponent>(playerId);
         var vel = c.GetComponent<VelocityComponent>(playerId);

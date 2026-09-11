@@ -24,6 +24,8 @@ public struct ControlComponent
     public bool runHeld;
     public bool blockPressed;
     public bool blockPressedLastFrame;
+    public bool dashPressed;
+    public bool dashHeldLastFrame;
 }
 
 public struct PlatformerComponent
@@ -44,7 +46,12 @@ public struct JumpComponent
 public struct DashComponent
 {
     public float speed;
+    public float duration;
+    public float cooldown;
     public bool dashing;
+    public float dashTimeRemaining;
+    public float cooldownRemaining;
+    public float direction;
 }
 
 public struct SpriteComponent
