@@ -37,10 +37,6 @@ public class HealthSystem : ISystem
                 entityHealth.iFrames -= deltaTime;
                 entityHealth.stunFrames -= deltaTime;
             }
-            else if (entityHealth.iFrames < 0)
-            {
-                entityHealth.iFrames = 0;
-            }
             if (entityHealth.currentHealth <= 0)
             {
                 if (coordinator.HasComponent<PlayerControlledComponent>(entityId))
